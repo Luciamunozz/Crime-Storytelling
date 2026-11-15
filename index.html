@@ -2,8 +2,9 @@
 <html lang="es">
 
 <head>
-    <link rel="icon" type="image/png" href="icon.png">
-    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="icon" type="image/png" href="icon_detective.png">
+    <link rel="apple-touch-icon" href="icon_detective.png">
+    <!-- prueba 1-->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Crime & Storytelling — Vocabulary Game</title>
@@ -291,8 +292,8 @@
                 <option value="pending">Sin responder</option>
                 <option value="correct">Correctas</option>
                 <option value="wrong">Incorrectas</option>
-            </select><button class="primary" id="check">✓ Corregir y mezclar</button><button class="secondary"
-                id="reveal">👁 Ver respuestas</button><button class="neutral" id="reset">↻ Reiniciar</button></div>
+            </select><button class="primary" id="check">✓ Corregir</button><button class="secondary" id="reveal">👁 Ver
+                respuestas</button><button class="neutral" id="reset">↻ Reiniciar</button></div>
         <div class="progress">
             <div class="fill" id="fill"></div>
         </div>
@@ -312,7 +313,7 @@
         function shuffle() { for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[order[i], order[j]] = [order[j], order[i]] } }
         function render() { const q = norm($('search').value), filter = $('filter').value; const visible = order.map(i => words[i]).filter(w => norm(w.english).includes(q) && (filter === 'all' || (filter === 'pending' ? !w.value.trim() : w.status === filter))); const host = $('cards'); host.replaceChildren(); visible.forEach((w, i) => { const card = document.createElement('article'); card.className = 'card'; const top = document.createElement('div'); top.className = 'top'; const word = document.createElement('span'); word.className = 'word'; word.textContent = w.english; const num = document.createElement('span'); num.className = 'number'; num.textContent = '#' + (i + 1); top.append(word, num); const label = document.createElement('label'); label.textContent = 'Significado en español'; const inp = document.createElement('input'); inp.type = 'text'; inp.className = 'answer' + (w.status === 'correct' ? ' correct' : w.status === 'wrong' ? ' wrong' : ''); inp.placeholder = 'Escribe la traducción...'; inp.autocomplete = 'off'; inp.spellcheck = false; inp.value = revealed ? w.answers[0] : w.value; inp.disabled = revealed; inp.addEventListener('input', () => { w.value = inp.value; w.status = 'pending'; inp.className = 'answer'; msg.textContent = ''; updateScore() }); const msg = document.createElement('div'); msg.className = 'feedback'; if (w.status === 'correct') { msg.classList.add('good'); msg.textContent = '✓ Correcto' } else if (w.status === 'wrong') { msg.classList.add('bad'); msg.textContent = '✗ Respuesta correcta: ' + w.answers[0] } else if (revealed) { msg.classList.add('good'); msg.textContent = 'Respuesta: ' + w.answers[0] } card.append(top, label, inp, msg); host.append(card) }); $('counter').textContent = visible.length + ' de ' + words.length + ' palabras'; updateScore() }
         function updateScore() { const points = words.filter(w => w.status === 'correct').length; $('score').textContent = points; $('total').textContent = words.length; $('percent').textContent = Math.round(points / words.length * 100) + '%'; $('fill').style.width = points / words.length * 100 + '%' }
-        $('check').addEventListener('click', () => { revealed = false; $('reveal').textContent = '👁 Ver respuestas'; let correct = 0, wrong = 0, blank = 0; for (const w of words) { if (!w.value.trim()) { w.status = 'pending'; blank++ } else if (w.answers.some(a => norm(a) === norm(w.value))) { w.status = 'correct'; correct++ } else { w.status = 'wrong'; wrong++ } } const old = order.join(','); shuffle(); if (order.join(',') === old && order.length > 1) order.reverse(); $('summary').classList.remove('hidden'); $('summary').textContent = `Resultado: ${correct} aciertos · ${wrong} errores · ${blank} sin responder. ¡Orden mezclado para la siguiente ronda!`; $('filter').value = 'all'; render() });
+        $('check').addEventListener('click', () => { revealed = false; $('reveal').textContent = '👁 Ver respuestas'; let correct = 0, wrong = 0, blank = 0; for (const w of words) { if (!w.value.trim()) { w.status = 'pending'; blank++ } else if (w.answers.some(a => norm(a) === norm(w.value))) { w.status = 'correct'; correct++ } else { w.status = 'wrong'; wrong++ } } $('summary').classList.remove('hidden'); $('summary').textContent = `Resultado: ${correct} aciertos · ${wrong} errores · ${blank} sin responder. `; $('filter').value = 'all'; render() });
         $('reveal').addEventListener('click', () => { revealed = !revealed; $('reveal').textContent = revealed ? '🙈 Ocultar respuestas' : '👁 Ver respuestas'; render() });
         $('reset').addEventListener('click', () => { if (!confirm('¿Quieres borrar todas las respuestas y empezar otra vez?')) return; for (const w of words) { w.value = ''; w.status = 'pending' } revealed = false; $('reveal').textContent = '👁 Ver respuestas'; $('summary').classList.add('hidden'); $('search').value = ''; $('filter').value = 'all'; shuffle(); render() });
         $('search').addEventListener('input', render); $('filter').addEventListener('change', render); shuffle(); render();
