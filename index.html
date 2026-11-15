@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Crime & Storytelling — Vocabulary Game</title>
+    <style>
+        :root {
+            font-family: Inter, system-ui, Arial, sans-serif;
+            color: #233047;
+            background: #f1f5fb
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            padding-bottom: 45px
+        }
+
+        header {
+            background: linear-gradient(115deg, #3730a3, #2563eb);
+            color: white;
+            padding: 23px 5%;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            box-shadow: 0 4px 16px #1e40af25
+        }
+
+        .head {
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px
+        }
+
+        h1 {
+            font-size: clamp(20px, 3vw, 29px);
+            margin: 0
+        }
+
+        header p {
+            margin: 5px 0 0;
+            color: #dbeafe;
+            font-size: 13px
+        }
+
+        .score {
+            background: #ffffff25;
+            border: 1px solid #ffffff44;
+            padding: 10px 16px;
+            border-radius: 15px;
+            text-align: center;
+            white-space: nowrap
+        }
+
+        .score strong {
+            font-size: 23px
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 25px auto;
+            padding: 0 16px
+        }
+
+        .toolbar {
+            background: white;
+            border-radius: 18px;
+            padding: 16px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+            box-shadow: 0 2px 12px #17255410
+        }
+
+        .toolbar input,
+        .toolbar select {
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font: inherit;
+            min-width: 0
+        }
+
+        .toolbar input {
+            flex: 1;
+            min-width: 180px
+        }
+
+        button {
+            border: 0;
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 14px
+        }
+
+        button:hover {
+            filter: brightness(.95)
+        }
+
+        .primary {
+            background: #4f46e5;
+            color: white
+        }
+
+        .secondary {
+            background: #f59e0b;
+            color: #211900
+        }
+
+        .neutral {
+            background: #e2e8f0;
+            color: #334155
+        }
+
+        .progress {
+            height: 10px;
+            background: #dce3ee;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 20px 0
+        }
+
+        .fill {
+            height: 100%;
+            width: 0;
+            background: #4f46e5;
+            transition: width .3s
+        }
+
+        .info {
+            margin: 12px 0;
+            color: #64748b;
+            font-size: 13px
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(295px, 1fr));
+            gap: 13px
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 17px;
+            box-shadow: 0 2px 8px #0f172a08
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 12px
+        }
+
+        .word {
+            font-weight: 800;
+            font-size: 19px
+        }
+
+        .number {
+            color: #64748b;
+            font-size: 12px;
+            background: #f1f5f9;
+            border-radius: 7px;
+            padding: 5px 8px
+        }
+
+        .card label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+            margin-bottom: 7px
+        }
+
+        .answer {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font: inherit;
+            background: white
+        }
+
+        .answer.correct {
+            background: #e8f7ee;
+            border-color: #16a34a;
+            color: #166534
+        }
+
+        .answer.wrong {
+            background: #fff0f0;
+            border-color: #dc2626;
+            color: #991b1b
+        }
+
+        .feedback {
+            font-size: 12px;
+            margin-top: 8px;
+            font-weight: 600;
+            min-height: 0
+        }
+
+        .good {
+            color: #15803d
+        }
+
+        .bad {
+            color: #b91c1c
+        }
+
+        .summary {
+            background: #eef2ff;
+            border: 1px solid #c7d2fe;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin: 16px 0;
+            font-weight: 650;
+            color: #3730a3
+        }
+
+        .hidden {
+            display: none
+        }
+
+        .note {
+            color: #64748b;
+            font-size: 12px;
+            margin-top: 18px
+        }
+
+        @media(max-width:580px) {
+            header {
+                padding: 15px
+            }
+
+            .head {
+                align-items: flex-start
+            }
+
+            .score {
+                padding: 8px
+            }
+
+            .score strong {
+                font-size: 18px
+            }
+
+            .toolbar button {
+                flex: 1
+            }
+
+            .grid {
+                grid-template-columns: 1fr
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="head">
+            <div>
+                <h1>🕵️ Crime & Storytelling</h1>
+                <p>Escribe el significado en español de cada palabra</p>
+            </div>
+            <div class="score"><small>🏆 PUNTUACIÓN</small><br><strong id="score">0</strong> / <span
+                    id="total">0</span><br><small id="percent">0%</small></div>
+        </div>
+    </header>
+    <main>
+        <div class="toolbar"><input id="search" placeholder="🔎 Buscar palabra en inglés..."
+                aria-label="Buscar palabra"><select id="filter" aria-label="Filtrar">
+                <option value="all">Todas las palabras</option>
+                <option value="pending">Sin responder</option>
+                <option value="correct">Correctas</option>
+                <option value="wrong">Incorrectas</option>
+            </select><button class="primary" id="check">✓ Corregir y mezclar</button><button class="secondary"
+                id="reveal">👁 Ver respuestas</button><button class="neutral" id="reset">↻ Reiniciar</button></div>
+        <div class="progress">
+            <div class="fill" id="fill"></div>
+        </div>
+        <div class="summary hidden" id="summary"></div>
+        <p class="info" id="counter"></p>
+        <section class="grid" id="cards"></section>
+        <p class="note">Se aceptan mayúsculas, minúsculas y respuestas sin tildes. También se reconocen varias
+            traducciones habituales.</p>
+    </main>
+    <script>
+        const words = [
+            ['genre', 'género'], ['crime scene', 'escena del crimen'], ['experts', 'expertos'], ['uncover fingerprints', 'descubrir huellas dactilares|encontrar huellas dactilares|descubrir huellas'], ['clues', 'pistas'], ['victims', 'víctimas'], ['court', 'tribunal|juzgado'], ['lawyer', 'abogado|abogada'], ['jury', 'jurado'], ['judge', 'juez|jueza'], ['detective', 'detective'], ['put together', 'establecer|juntar|unir|reunir'], ['break into', 'robar en una casa|entrar a robar|entrar por la fuerza|irrumpir'], ['murder', 'asesinato|asesinar'], ['guilty', 'culpable'], ['steal / rob', 'robar'], ['doorman', 'portero|conserje'], ['loudly', 'en alto|en voz alta|fuertemente'], ['thief', 'ladrón|ladrona'], ['to arrest', 'arrestar|detener'], ['thriller', 'película de suspense|película de suspenso|suspense|suspenso'], ['paintings', 'cuadros|pinturas'], ['art dealer', 'tratante de arte|comerciante de arte|marchante de arte'], ['gun', 'pistola|arma'], ['evidence', 'evidencia|pruebas|prueba'], ['wallet', 'cartera'], ['items', 'artículos|objetos|elementos'], ['wardrobe', 'armario'], ['prison', 'prisión|cárcel'], ['ancient', 'antiguo|antigua'],
+            ['legends', 'leyendas'], ['myths', 'mitos'], ['fairy tales', 'cuentos de hadas'], ['setting', 'escenario|ambientación'], ['characters', 'protagonistas|personajes'], ['awful', 'horrible|terrible'], ['amusing', 'divertido|divertida|entretenido|entretenida'], ['thrilling', 'emocionante'], ['suitable', 'apropiado|apropiada|adecuado|adecuada'], ['plot', 'argumento|trama'], ['private eye / private investigator', 'detective|investigador privado|investigadora privada|detective privado'], ['to realise', 'darse cuenta|percatarse'], ['to wonder', 'preguntarse'], ['to faint', 'desmayarse'], ['to keep quiet', 'estar callado|estar callada|callarse|guardar silencio'], ['to avoid', 'evitar'], ['to make a noise', 'hacer ruido'], ['to approach', 'acercarse'], ['to grab', 'coger|agarrar'], ['to run away', 'correr|huir|escapar|salir corriendo'], ['purses', 'bolso|bolsos|monederos'], ['owner', 'dueño|dueña|propietario|propietaria'], ['customers', 'cliente|clientes'], ['ordinary', 'normal|corriente|ordinario|ordinaria'], ['to punish', 'castigar'], ['scream', 'gritar|grito'], ['to step back', 'retirarse|retroceder|dar un paso atrás']
+        ].map(([english, spanish], id) => ({ id, english, answers: spanish.split('|'), value: '', status: 'pending' }));
+        let order = words.map(w => w.id), revealed = false; const $ = id => document.getElementById(id);
+        function norm(s) { return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[¿?¡!.,]/g, '').replace(/\s+/g, ' ').trim() }
+        function shuffle() { for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[order[i], order[j]] = [order[j], order[i]] } }
+        function render() { const q = norm($('search').value), filter = $('filter').value; const visible = order.map(i => words[i]).filter(w => norm(w.english).includes(q) && (filter === 'all' || (filter === 'pending' ? !w.value.trim() : w.status === filter))); const host = $('cards'); host.replaceChildren(); visible.forEach((w, i) => { const card = document.createElement('article'); card.className = 'card'; const top = document.createElement('div'); top.className = 'top'; const word = document.createElement('span'); word.className = 'word'; word.textContent = w.english; const num = document.createElement('span'); num.className = 'number'; num.textContent = '#' + (i + 1); top.append(word, num); const label = document.createElement('label'); label.textContent = 'Significado en español'; const inp = document.createElement('input'); inp.type = 'text'; inp.className = 'answer' + (w.status === 'correct' ? ' correct' : w.status === 'wrong' ? ' wrong' : ''); inp.placeholder = 'Escribe la traducción...'; inp.autocomplete = 'off'; inp.spellcheck = false; inp.value = revealed ? w.answers[0] : w.value; inp.disabled = revealed; inp.addEventListener('input', () => { w.value = inp.value; w.status = 'pending'; inp.className = 'answer'; msg.textContent = ''; updateScore() }); const msg = document.createElement('div'); msg.className = 'feedback'; if (w.status === 'correct') { msg.classList.add('good'); msg.textContent = '✓ Correcto' } else if (w.status === 'wrong') { msg.classList.add('bad'); msg.textContent = '✗ Respuesta correcta: ' + w.answers[0] } else if (revealed) { msg.classList.add('good'); msg.textContent = 'Respuesta: ' + w.answers[0] } card.append(top, label, inp, msg); host.append(card) }); $('counter').textContent = visible.length + ' de ' + words.length + ' palabras'; updateScore() }
+        function updateScore() { const points = words.filter(w => w.status === 'correct').length; $('score').textContent = points; $('total').textContent = words.length; $('percent').textContent = Math.round(points / words.length * 100) + '%'; $('fill').style.width = points / words.length * 100 + '%' }
+        $('check').addEventListener('click', () => { revealed = false; $('reveal').textContent = '👁 Ver respuestas'; let correct = 0, wrong = 0, blank = 0; for (const w of words) { if (!w.value.trim()) { w.status = 'pending'; blank++ } else if (w.answers.some(a => norm(a) === norm(w.value))) { w.status = 'correct'; correct++ } else { w.status = 'wrong'; wrong++ } } const old = order.join(','); shuffle(); if (order.join(',') === old && order.length > 1) order.reverse(); $('summary').classList.remove('hidden'); $('summary').textContent = `Resultado: ${correct} aciertos · ${wrong} errores · ${blank} sin responder. ¡Orden mezclado para la siguiente ronda!`; $('filter').value = 'all'; render() });
+        $('reveal').addEventListener('click', () => { revealed = !revealed; $('reveal').textContent = revealed ? '🙈 Ocultar respuestas' : '👁 Ver respuestas'; render() });
+        $('reset').addEventListener('click', () => { if (!confirm('¿Quieres borrar todas las respuestas y empezar otra vez?')) return; for (const w of words) { w.value = ''; w.status = 'pending' } revealed = false; $('reveal').textContent = '👁 Ver respuestas'; $('summary').classList.add('hidden'); $('search').value = ''; $('filter').value = 'all'; shuffle(); render() });
+        $('search').addEventListener('input', render); $('filter').addEventListener('change', render); shuffle(); render();
+    </script>
+</body>
+
+</html>
